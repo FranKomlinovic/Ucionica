@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="stays" />
+        <module name="utils" />
+        <module name="Ucioncia" />
+        <module name="DynamoDb" />
+        <module name="Payments" />
+        <module name="Stays" />
+        <module name="users" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="DynamoDb" target="11" />
+      <module name="Payments" target="11" />
+      <module name="Payments2" target="11" />
+      <module name="stays" target="11" />
+      <module name="Stays" target="11" />
+      <module name="Ucioncia" target="11" />
+      <module name="users" target="11" />
+      <module name="utils" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,13 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: users.GetHighestDebts
+      CodeUri: s3://ucionica-lambda/80c4005bd8457d50ef33e6a8aeff505c
+      Runtime: java11
+      Architectures:
+      - x86_64
+    Metadata:
+      SamResourceId: Function

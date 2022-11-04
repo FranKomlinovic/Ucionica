@@ -1,0 +1,13 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: payments.GetPayments
+      CodeUri: s3://ucionica-lambda/efd4936df6f17cb53e097724d6c96ad2
+      Runtime: java11
+      Architectures:
+      - x86_64
+    Metadata:
+      SamResourceId: Function

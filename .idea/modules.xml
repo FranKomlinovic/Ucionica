@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DynamoDb/DynamoDb.iml" filepath="$PROJECT_DIR$/DynamoDb/DynamoDb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Payments/Payments.iml" filepath="$PROJECT_DIR$/Payments/Payments.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Stays/HelloWorldFunction/Stays.iml" filepath="$PROJECT_DIR$/Stays/HelloWorldFunction/Stays.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Stays/Ucioncia.iml" filepath="$PROJECT_DIR$/Stays/Ucioncia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Ucionica.iml" filepath="$PROJECT_DIR$/Ucionica.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Stays/stays.iml" filepath="$PROJECT_DIR$/Stays/stays.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Users/users.iml" filepath="$PROJECT_DIR$/Users/users.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Utils/utils.iml" filepath="$PROJECT_DIR$/Utils/utils.iml" />
+    </modules>
+  </component>
+</project>
