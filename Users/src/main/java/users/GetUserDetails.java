@@ -28,6 +28,7 @@ import static utils.utils.EuroUtils.convertBigDecimalToString;
 
 public class GetUserDetails implements RequestHandler<APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse> {
 
+    private static final String USER_ID = ":userId";
     @Override
     public APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent apiGatewayV2HTTPEvent, Context context) {
         String id = getPathParameter(apiGatewayV2HTTPEvent, "id");
@@ -52,21 +53,21 @@ public class GetUserDetails implements RequestHandler<APIGatewayV2HTTPEvent, API
 
     private Boolean isCurrentlyActive(String userId) {
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("userId = :userId and attribute_not_exists(endTime)").withExpressionAttributeValues(Map.of(":userId", new AttributeValue().withS(userId)));
+                .withFilterExpression("userId = :userId and attribute_not_exists(endTime)").withExpressionAttributeValues(Map.of(USER_ID, new AttributeValue().withS(userId)));
 
         return !DYNAMO_DB_MAPPER.scan(StaysTable.class, scanExpression).isEmpty();
     }
 
     private List<StayDto> getAllStays(String userId) {
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("userId = :userId and attribute_exists(endTime)").withExpressionAttributeValues(Map.of(":userId", new AttributeValue().withS(userId)));
+                .withFilterExpression("userId = :userId and attribute_exists(endTime)").withExpressionAttributeValues(Map.of(USER_ID, new AttributeValue().withS(userId)));
 
         return DYNAMO_DB_MAPPER.scan(StaysTable.class, scanExpression).stream().sorted(Comparator.comparing(StaysTable::getStartTime).reversed()).map(StayDto::new).collect(Collectors.toList());
     }
 
     private List<PaymentDto> getAllPayments(String userId) {
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("userId = :userId").withExpressionAttributeValues(Map.of(":userId", new AttributeValue().withS(userId)));
+                .withFilterExpression("userId = :userId").withExpressionAttributeValues(Map.of(USER_ID, new AttributeValue().withS(userId)));
 
         return DYNAMO_DB_MAPPER.scan(PaymentTable.class, scanExpression).stream().sorted(Comparator.comparing(PaymentTable::getTime).reversed()).map(PaymentDto::new).collect(Collectors.toList());
 

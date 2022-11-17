@@ -20,8 +20,12 @@ public class EventTable {
     private String id;
     @DynamoDBAttribute(attributeName = "userList")
     private List<String> users;
+    @DynamoDBAttribute(attributeName = "acceptedUsers")
+    private List<String> acceptedUsers;
     @DynamoDBAttribute(attributeName = "name")
     private String name;
+    @DynamoDBAttribute(attributeName = "picture")
+    private String picture;
     @DynamoDBAttribute(attributeName = "description")
     private String description;
     @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)

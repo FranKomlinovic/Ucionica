@@ -15,4 +15,5 @@ public class CreateEventDto {
     private String endTime;
     private String name;
     private String description;
+    private String picture;
 }

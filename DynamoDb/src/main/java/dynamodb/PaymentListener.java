@@ -16,8 +16,8 @@ public class PaymentListener implements RequestHandler<DynamodbEvent, String> {
 
     @Override
     public String handleRequest(DynamodbEvent dynamodbEvent, Context context) {
-        for (DynamodbEvent.DynamodbStreamRecord record : dynamodbEvent.getRecords()) {
-            StreamRecord dynamodb = record.getDynamodb();
+        for (DynamodbEvent.DynamodbStreamRecord dynamoRecord : dynamodbEvent.getRecords()) {
+            StreamRecord dynamodb = dynamoRecord.getDynamodb();
             doMagic(dynamodb.getNewImage(), false);
             doMagic(dynamodb.getOldImage(), true);
         }

@@ -8,9 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
 import events.dto.EventDto;
 import software.amazon.awssdk.utils.StringUtils;
-import utils.dto.ResponseDto;
 import utils.entity.EventTable;
-import utils.entity.StaysTable;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,6 +18,7 @@ import java.util.stream.Collectors;
 import static utils.entity.SdkObjects.DYNAMO_DB_MAPPER;
 import static utils.utils.ApiGatewayUtils.createSuccessResponse;
 import static utils.utils.ApiGatewayUtils.getPathParameter;
+import static utils.utils.LocalDateTimeUtils.getCurrentTime;
 
 public class GetEventById implements RequestHandler<APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse> {
 
@@ -38,7 +37,7 @@ public class GetEventById implements RequestHandler<APIGatewayV2HTTPEvent, APIGa
                 .withFilterExpression("contains(userList, :v1) or attribute_not_exists(userList)")
                 .withExpressionAttributeValues(eav);
 
-        List<EventDto> collect = DYNAMO_DB_MAPPER.scan(EventTable.class, scanExpression).stream().sorted(Comparator.comparing(EventTable::getStartTime).reversed()).map(EventDto::new).collect(Collectors.toList());
+        List<EventDto> collect = DYNAMO_DB_MAPPER.scan(EventTable.class, scanExpression).stream().filter(a -> a.getEndTime().isAfter(getCurrentTime())).sorted(Comparator.comparing(EventTable::getStartTime)).map(EventDto::new).collect(Collectors.toList());
 
         return createSuccessResponse(collect);
     }

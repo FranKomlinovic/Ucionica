@@ -2,6 +2,7 @@ package events;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.util.StringUtils;
 import events.dto.CreateEventDto;
 import utils.dto.ResponseDto;
 import utils.entity.EventTable;
@@ -24,6 +25,9 @@ public class CreateEvent implements RequestHandler<CreateEventDto, ResponseDto> 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         eventsTable.setStartTime(LocalDateTime.parse(eventDto.getStartTime(), formatter));
         eventsTable.setEndTime(LocalDateTime.parse(eventDto.getEndTime(), formatter));
+        if (!StringUtils.isNullOrEmpty(eventDto.getPicture())) {
+            eventsTable.setPicture(eventDto.getPicture());
+        }
         DYNAMO_DB_MAPPER.save(eventsTable);
         return new ResponseDto("Event pod nazivom " + eventDto.getName() + " je kreiran");
 
