@@ -10,7 +10,7 @@ import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityPr
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SdkObjects {
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
     public static final CognitoIdentityProviderClient COGNITO_IDENTITY_PROVIDER = CognitoIdentityProviderClient.create();
     public static final DynamoDBMapper DYNAMO_DB_MAPPER = new DynamoDBMapper(AmazonDynamoDBClientBuilder.standard().build());
 }

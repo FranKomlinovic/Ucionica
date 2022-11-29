@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class CreatePaymentDto {
+    private String id;
     private String userId;
     private BigDecimal amount;
     private LocalDateTime time;
+    private String description;
 }

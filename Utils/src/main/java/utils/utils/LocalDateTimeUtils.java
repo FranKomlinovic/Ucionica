@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -37,5 +38,13 @@ public class LocalDateTimeUtils {
 
     public static LocalDateTime getCurrentTime() {
         return LocalDateTime.now(ZoneId.of("Europe/Zagreb"));
+    }
+
+    public static String convertToString(LocalDateTime dateTime) {
+        return ZonedDateTime.of(dateTime, ZoneId.of("Europe/Zagreb")).toOffsetDateTime().toString();
+    }
+
+    public static LocalDateTime convertToLocalDate(String dateTime) {
+        return ZonedDateTime.parse(dateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME).withZoneSameInstant(ZoneId.of("Europe/Zagreb")).toLocalDateTime();
     }
 }

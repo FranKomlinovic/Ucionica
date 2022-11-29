@@ -11,7 +11,7 @@ public class EuroUtils {
 
     private static final BigDecimal CONVERSION_RATE = BigDecimal.valueOf(7.53450);
 
-    private static BigDecimal convertToHrk(BigDecimal euro) {
+    public static BigDecimal convertToHrk(BigDecimal euro) {
         return euro.multiply(CONVERSION_RATE);
     }
 

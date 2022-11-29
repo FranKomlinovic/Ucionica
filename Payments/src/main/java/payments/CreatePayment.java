@@ -2,6 +2,7 @@ package payments;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.util.StringUtils;
 import payments.dto.CreatePaymentDto;
 import utils.dto.ResponseDto;
 import utils.dto.UserDto;
@@ -19,15 +20,18 @@ public class CreatePayment implements RequestHandler<CreatePaymentDto, ResponseD
     @Override
     public ResponseDto handleRequest(CreatePaymentDto paymentDto, Context context) {
         UserDto user = getUserById(paymentDto.getUserId());
-        if (user == null) {
-            return new ResponseDto("Nije pronađen korisnik");
+
+        PaymentTable paymentTable = new PaymentTable();
+
+        if (!StringUtils.isNullOrEmpty(paymentDto.getId())) {
+            paymentTable = DYNAMO_DB_MAPPER.load(PaymentTable.class, paymentDto.getId());
         }
+
         LocalDateTime time = getCurrentTime();
         if (paymentDto.getTime() != null) {
             time = paymentDto.getTime();
         }
 
-        PaymentTable paymentTable = new PaymentTable();
         paymentTable.setUserId(paymentDto.getUserId());
         // Makni kada dođe EURO
         paymentTable.setAmount(EuroUtils.convertFromHrk(paymentDto.getAmount()));

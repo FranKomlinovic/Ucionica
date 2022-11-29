@@ -13,6 +13,7 @@ import static utils.utils.EuroUtils.convertBigDecimalToString;
 @Setter
 @ToString
 public class HighestDebtsDto {
+    private String userId;
     private String user;
     private String amount;
     private String picture;
@@ -20,9 +21,8 @@ public class HighestDebtsDto {
     public HighestDebtsDto(UserBalance userBalance) {
         this.amount = convertBigDecimalToString(userBalance.getBalance());
         UserDto userById = getUserById(userBalance.getUserId());
-        if (userById != null) {
-            this.picture = userById.getPicture();
-            this.user = userById.getUsername();
-        }
+        this.picture = userById.getPicture();
+        this.user = userById.getUsername();
+        this.userId = userById.getId();
     }
 }

@@ -22,6 +22,8 @@ public class PaymentTable {
     private String id;
     @DynamoDBAttribute(attributeName = "userId")
     private String userId;
+    @DynamoDBAttribute(attributeName = "description")
+    private String description;
     @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime time;
     @DynamoDBAttribute(attributeName = "amount")

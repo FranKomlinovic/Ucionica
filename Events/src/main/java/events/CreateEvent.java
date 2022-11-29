@@ -7,29 +7,36 @@ import events.dto.CreateEventDto;
 import utils.dto.ResponseDto;
 import utils.entity.EventTable;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static utils.entity.SdkObjects.DYNAMO_DB_MAPPER;
+import static utils.utils.LocalDateTimeUtils.convertToLocalDate;
 
 public class CreateEvent implements RequestHandler<CreateEventDto, ResponseDto> {
 
     @Override
     public ResponseDto handleRequest(CreateEventDto eventDto, Context context) {
         EventTable eventsTable = new EventTable();
-        if (!eventDto.getUsers().isEmpty()) {
-            eventsTable.setUsers(eventDto.getUsers());
+        String responseText = "kreiran";
+        if (!StringUtils.isNullOrEmpty(eventDto.getId())) {
+            eventsTable = DYNAMO_DB_MAPPER.load(EventTable.class, eventDto.getId());
+            responseText = "ažuriran";
         }
+        List<String> users = eventDto.getUsers();
+        if (users == null || users.isEmpty()) {
+            users = null;
+        }
+        eventsTable.setUsers(users);
+
+
         eventsTable.setName(eventDto.getName());
         eventsTable.setDescription(eventDto.getDescription());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        eventsTable.setStartTime(LocalDateTime.parse(eventDto.getStartTime(), formatter));
-        eventsTable.setEndTime(LocalDateTime.parse(eventDto.getEndTime(), formatter));
+        eventsTable.setStartTime(convertToLocalDate(eventDto.getStartTime()));
+        eventsTable.setEndTime(convertToLocalDate(eventDto.getEndTime()));
         if (!StringUtils.isNullOrEmpty(eventDto.getPicture())) {
             eventsTable.setPicture(eventDto.getPicture());
         }
         DYNAMO_DB_MAPPER.save(eventsTable);
-        return new ResponseDto("Event pod nazivom " + eventDto.getName() + " je kreiran");
-
+        return new ResponseDto("Event pod nazivom " + eventDto.getName() + " je " + responseText);
     }
 }

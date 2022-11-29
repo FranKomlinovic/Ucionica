@@ -7,6 +7,7 @@ import utils.entity.EventTable;
 import utils.utils.CognitoUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static utils.utils.LocalDateTimeUtils.convertToDateString;
 import static utils.utils.LocalDateTimeUtils.convertToTimeString;
@@ -27,7 +28,8 @@ public class EventDto {
 
     public EventDto(EventTable eventsTable) {
         this.setId(eventsTable.getId());
-        if (eventsTable.getUsers() != null) {
+        List<String> invitedUsers = eventsTable.getUsers();
+        if (invitedUsers != null && !eventsTable.getUsers().isEmpty()) {
             this.setUsers(StringUtils.join(", ",
                     eventsTable.getUsers().stream()
                             .map(userId -> CognitoUtils.getUserById(userId).getUsername())

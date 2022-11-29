@@ -17,6 +17,10 @@ public class UserDetailDto {
    private Boolean currentlyActive;
    private List<StayDto> stays;
    private List<PaymentDto> payments;
-
+   private String timeSpent;
+   private String averageTimeSpent;
+   private String totalStayPrice;
+   private String totalPayments;
+   private String averageStayPrice;
 }
 

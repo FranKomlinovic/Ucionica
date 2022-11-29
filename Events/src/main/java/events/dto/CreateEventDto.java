@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @ToString
 public class CreateEventDto {
+    private String id;
     private List<String> users;
     private String startTime;
     private String endTime;
