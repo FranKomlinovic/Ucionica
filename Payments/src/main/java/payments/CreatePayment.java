@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 import static utils.entity.SdkObjects.DYNAMO_DB_MAPPER;
 import static utils.utils.CognitoUtils.getUserById;
+import static utils.utils.LocalDateTimeUtils.convertToLocalDate;
 import static utils.utils.LocalDateTimeUtils.getCurrentTime;
 
 public class CreatePayment implements RequestHandler<CreatePaymentDto, ResponseDto> {
@@ -29,10 +30,11 @@ public class CreatePayment implements RequestHandler<CreatePaymentDto, ResponseD
 
         LocalDateTime time = getCurrentTime();
         if (paymentDto.getTime() != null) {
-            time = paymentDto.getTime();
+            time = convertToLocalDate(paymentDto.getTime());
         }
 
         paymentTable.setUserId(paymentDto.getUserId());
+        paymentTable.setDescription(paymentDto.getDescription());
         // Makni kada dođe EURO
         paymentTable.setAmount(EuroUtils.convertFromHrk(paymentDto.getAmount()));
         paymentTable.setTime(time);

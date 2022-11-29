@@ -17,6 +17,7 @@ public class PaymentDto {
     private String time;
     private String amount;
     private String picture;
+    private String description;
 
     public PaymentDto(PaymentTable payment) {
         this.setId(payment.getId());

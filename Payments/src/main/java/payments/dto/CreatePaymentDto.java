@@ -14,6 +14,6 @@ public class CreatePaymentDto {
     private String id;
     private String userId;
     private BigDecimal amount;
-    private LocalDateTime time;
+    private String time;
     private String description;
 }
