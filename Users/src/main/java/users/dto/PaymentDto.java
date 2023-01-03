@@ -17,11 +17,15 @@ public class PaymentDto {
     private String date;
     private String time;
     private String amount;
+    private String description = "Standardna uplata";
 
     public PaymentDto(PaymentTable paymentTable) {
         this.date = convertToDateString(paymentTable.getTime());
         this.time = convertToTimeString(paymentTable.getTime());
         this.amount = convertBigDecimalToString(paymentTable.getAmount());
+        if (paymentTable.getDescription() != null) {
+            this.setDescription(paymentTable.getDescription());
+        }
     }
 }
 

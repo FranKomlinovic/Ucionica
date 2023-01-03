@@ -15,7 +15,6 @@ import users.dto.UserDetailDto;
 import utils.dto.UserDto;
 import utils.entity.PaymentTable;
 import utils.entity.StaysTable;
-import utils.entity.UserBalance;
 import utils.utils.CognitoUtils;
 
 import java.math.BigDecimal;
@@ -45,12 +44,13 @@ public class GetUserDetails implements RequestHandler<APIGatewayV2HTTPEvent, API
         userDetailDto.setUsername(userById.getUsername());
         userDetailDto.setId(userById.getId());
         userDetailDto.setPicture(userById.getPicture());
-
+        List<StaysTable> allStays = getAllStays(id);
+        List<PaymentTable> allPayments = getAllPayments(id);
         UserInfo userInfo = new UserInfo();
-        userDetailDto.setBalance(convertBigDecimalToString(DYNAMO_DB_MAPPER.load(UserBalance.class, id).getBalance()));
+        userDetailDto.setBalance(convertBigDecimalToString(calculateBalance(allPayments, allStays)));
         userDetailDto.setCurrentlyActive(isCurrentlyActive(id));
-        userInfo.withStays(getAllStays(id));
-        userInfo.withPayments(getAllPayments(id));
+        userInfo.withStays(allStays);
+        userInfo.withPayments(allPayments);
         userDetailDto.setStays(userInfo.getAllStays());
         userDetailDto.setPayments(userInfo.getAllPayments());
         userDetailDto.setTotalStayPrice(userInfo.getTotalStayPrice());
@@ -60,6 +60,13 @@ public class GetUserDetails implements RequestHandler<APIGatewayV2HTTPEvent, API
         userDetailDto.setAverageTimeSpent(userInfo.getAverageTimeSpent());
 
         return createSuccessResponse(userDetailDto);
+    }
+
+    private BigDecimal calculateBalance(List<PaymentTable> allPayments, List<StaysTable> allStays) {
+        double payments = allPayments.stream().mapToDouble(a -> a.getAmount().doubleValue()).sum();
+        double stays = allStays.stream().mapToDouble(a -> a.getPrice().doubleValue()).sum();
+        return BigDecimal.valueOf(payments - stays);
+
     }
 
     private Boolean isCurrentlyActive(String userId) {
@@ -99,6 +106,9 @@ class UserInfo {
 
     public UserInfo withStays(List<StaysTable> stayTables) {
         allStays = stayTables.stream().map(StayDto::new).collect(Collectors.toList());
+        if (allStays.isEmpty()) {
+            return this;
+        }
         int numberOfStays = allStays.size();
         long totalMinutes = stayTables.stream().mapToLong(a -> Duration.between(a.getStartTime(), a.getEndTime()).toMinutes()).sum();
         Duration averageTime = Duration.ofMinutes(totalMinutes / numberOfStays);
@@ -108,7 +118,7 @@ class UserInfo {
 
         double totalPrice = stayTables.stream().mapToDouble(a -> a.getPrice().doubleValue()).sum();
         totalStayPrice = convertBigDecimalToString(BigDecimal.valueOf(totalPrice));
-        averageStayPrice = convertBigDecimalToString(BigDecimal.valueOf(totalPrice/numberOfStays));
+        averageStayPrice = convertBigDecimalToString(BigDecimal.valueOf(totalPrice / numberOfStays));
 
         return this;
     }
