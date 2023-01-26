@@ -35,11 +35,10 @@ public class CreatePayment implements RequestHandler<CreatePaymentDto, ResponseD
 
         paymentTable.setUserId(paymentDto.getUserId());
         paymentTable.setDescription(paymentDto.getDescription());
-        // Makni kada dođe EURO
-        paymentTable.setAmount(EuroUtils.convertFromHrk(paymentDto.getAmount()));
+        paymentTable.setAmount(paymentDto.getAmount());
         paymentTable.setTime(time);
         DYNAMO_DB_MAPPER.save(paymentTable);
-        return new ResponseDto("Pobratime " + user.getUsername() + " hvala na uplati od: " + paymentDto.getAmount().toPlainString() + "kn");
+        return new ResponseDto("Pobratime " + user.getUsername() + " hvala na uplati od: " + paymentDto.getAmount().toPlainString() + "eur");
 
     }
 }

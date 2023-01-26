@@ -18,7 +18,7 @@ import static utils.entity.SdkObjects.DYNAMO_DB_MAPPER;
 import static utils.utils.CognitoUtils.getUserById;
 import static utils.utils.LocalDateTimeUtils.getCurrentTime;
 
-public class EvidentStay implements RequestHandler<CreateStayDto, ResponseDto> {
+public class EndStay implements RequestHandler<CreateStayDto, ResponseDto> {
 
 
     @Override
@@ -34,13 +34,12 @@ public class EvidentStay implements RequestHandler<CreateStayDto, ResponseDto> {
         }
         StaysTable existingStay = getByUserIdAndNoDate(stayDto.getUserId());
         if (existingStay != null) {
-            return new ResponseDto("Već ste prijavljeni");
+            existingStay.setEndTime(time);
+            existingStay.setPrice();
+            DYNAMO_DB_MAPPER.save(existingStay);
+            return new ResponseDto("Zbogom " + user.getUsername());
         } else {
-            StaysTable staysTable = new StaysTable();
-            staysTable.setUserId(stayDto.getUserId());
-            staysTable.setStartTime(time);
-            DYNAMO_DB_MAPPER.save(staysTable);
-            return new ResponseDto("Dobrodošao " + user.getUsername());
+            return new ResponseDto("Već ste odjavljeni");
         }
     }
 

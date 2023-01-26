@@ -20,7 +20,7 @@ public class PaymentByIdDto {
         this.setId(eventsTable.getId());
         this.setUserId(eventsTable.getUserId());
         this.setTime(convertToString(eventsTable.getTime()));
-        this.setAmount(convertToHrk(eventsTable.getAmount()).doubleValue());
+        this.setAmount(eventsTable.getAmount().doubleValue());
         this.setDescription(eventsTable.getDescription());
     }
 }
